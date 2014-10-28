@@ -27,6 +27,7 @@ public class Scene extends JPanel implements ActionListener
 	public Scene()
 	{
 		children = new ArrayList<Node>();
+		// set a 16ms (~1/60th of a second timer)
 		frameTimer = new Timer(16, this);
 		setFocusable(true);
 	}
