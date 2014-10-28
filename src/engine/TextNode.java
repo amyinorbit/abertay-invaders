@@ -54,15 +54,18 @@ public class TextNode extends Node
 	@Override
 	public void draw(Graphics graphics)
 	{
-		if(graphics instanceof Graphics2D)
+		if(visible)
 		{
-			((Graphics2D)graphics).setRenderingHint(
-				RenderingHints.KEY_TEXT_ANTIALIASING,
-				RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
+			if(graphics instanceof Graphics2D)
+			{
+				((Graphics2D)graphics).setRenderingHint(
+					RenderingHints.KEY_TEXT_ANTIALIASING,
+					RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
+			}
+			graphics.setFont(font);
+			graphics.setColor(color);
+			Rectangle frame = getFrame();
+			graphics.drawString(text, frame.x, frame.y+frame.height);
 		}
-		graphics.setFont(font);
-		graphics.setColor(color);
-		Rectangle frame = getFrame();
-		graphics.drawString(text, frame.x, frame.y+frame.height);
 	}
 }

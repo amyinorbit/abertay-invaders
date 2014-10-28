@@ -71,6 +71,12 @@ public abstract class Node
 		position.y = y;
 	}
 	
+	public void setPosition(int x, int y)
+	{
+		setX(x);
+		setY(y);
+	}
+	
 	public void setWidth(int w)
 	{
 		frame.width = w;

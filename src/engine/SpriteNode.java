@@ -41,10 +41,13 @@ public class SpriteNode extends Node
 	@Override
 	public void draw(Graphics graphics)
 	{
-		Rectangle frame = getFrame();
-		graphics.drawImage(this.image,
-			frame.x,
-			frame.y,
-			null);
+		if(visible)
+		{
+			Rectangle frame = getFrame();
+			graphics.drawImage(this.image,
+				frame.x,
+				frame.y,
+				null);
+		}
 	}
 }
