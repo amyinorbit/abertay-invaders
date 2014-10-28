@@ -38,8 +38,8 @@ public class TextNode extends Node
 	private void processText()
 	{
 		Rectangle2D bounds = font.getStringBounds(text, context);
-		frame.width = (int) bounds.getWidth();
-		frame.height = (int) bounds.getHeight();
+		setWidth((int) bounds.getWidth());
+		setHeight((int) bounds.getHeight());
 	}
 	
 	/*
@@ -62,6 +62,7 @@ public class TextNode extends Node
 		}
 		graphics.setFont(font);
 		graphics.setColor(color);
+		Rectangle frame = getFrame();
 		graphics.drawString(text, frame.x, frame.y+frame.height);
 	}
 }

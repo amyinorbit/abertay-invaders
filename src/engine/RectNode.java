@@ -16,16 +16,20 @@ public class RectNode extends Node
 	public RectNode(int width, int height, Color color)
 	{
 		super();
-		frame.width = width;
-		frame.height = height;
+		setWidth(width);
+		setHeight(height);
 		this.color = color;
 	}
 	
 	@Override
 	public void draw(Graphics graphics)
 	{
-		graphics.setColor(color);
-		graphics.fillRect(frame.x, frame.y, frame.width, frame.height);
+		if(visible)
+		{
+			Rectangle frame = getFrame();
+			graphics.setColor(color);
+			graphics.fillRect(frame.x, frame.y, frame.width, frame.height);
+		}
 	}
 	
 }

@@ -34,13 +34,14 @@ public class SpriteNode extends Node
 		{
 			throw new RuntimeException(e.getMessage());
 		}
-		frame.width = image.getWidth();
-		frame.height = image.getHeight();
+		setWidth(image.getWidth());
+		setHeight(image.getHeight());
 	}
 	
 	@Override
 	public void draw(Graphics graphics)
 	{
+		Rectangle frame = getFrame();
 		graphics.drawImage(this.image,
 			frame.x,
 			frame.y,
