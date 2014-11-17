@@ -14,21 +14,27 @@ import java.awt.RenderingHints;
 *
 * Created on 2014-10-28 by Cesar Parent <http://cesarparent.com>
 */
-public class TextNode extends Node
+public class TextNode extends Node implements java.io.Serializable
 {
 	protected String text;
 	protected Font font;
-	protected FontRenderContext context;
-	protected Color color;
+	public Color color;
+	public Color background;
 	
-	public TextNode(String string, String fontname, int size, Color color)
+	public TextNode(String string, String fontname, int size, Color fg)
 	{
 		super();
 		text = string;
 		font = new Font(fontname, Font.PLAIN, size);
-		context = new FontRenderContext(null, true, true);
-		this.color = color;
+		color = fg;
+		background = null;
 		processText();
+	}
+	
+	public TextNode(String string, String fontname, int size, Color fg, Color bg)
+	{
+		this(string, fontname, size, fg);
+		this.background = bg;
 	}
 	
 	/*
@@ -37,6 +43,7 @@ public class TextNode extends Node
 	*/
 	private void processText()
 	{
+		FontRenderContext context = new FontRenderContext(null, true, true);
 		Rectangle2D bounds = font.getStringBounds(text, context);
 		setWidth((int) bounds.getWidth());
 		setHeight((int) bounds.getHeight());
@@ -63,8 +70,13 @@ public class TextNode extends Node
 					RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
 			}
 			graphics.setFont(font);
-			graphics.setColor(color);
 			Rectangle frame = getFrame();
+			if(background != null)
+			{
+				graphics.setColor(background);
+				graphics.fillRect(frame.x-10, frame.y+10, frame.width+15, frame.height);
+			}
+			graphics.setColor(color);
 			graphics.drawString(text, frame.x, frame.y+frame.height);
 		}
 	}

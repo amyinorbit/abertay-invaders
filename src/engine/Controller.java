@@ -10,7 +10,7 @@ import java.awt.event.KeyListener;
 *
 * Created on 2014-10-28 by Cesar Parent <http://cesarparent.com>
 */
-public class Controller implements KeyListener
+public class Controller implements KeyListener, java.io.Serializable
 {
 	public boolean up;
 	public boolean down;
@@ -21,11 +21,6 @@ public class Controller implements KeyListener
 	public boolean returnKey;
 	public boolean escapeKey;
 	
-	public Controller(Scene currentScene)
-	{
-		currentScene.addKeyListener(this);
-		currentScene.requestFocusInWindow();
-	}
 	
 	/*
 	* Resets every property of a controller object
@@ -51,12 +46,20 @@ public class Controller implements KeyListener
 	{
 		switch(e.getKeyCode())
 		{
-			case 37:
+			case KeyEvent.VK_LEFT:
 				left = true;
 				break;
 			
-			case 39:
+			case KeyEvent.VK_RIGHT:
 				right = true;
+				break;
+			
+			case KeyEvent.VK_UP:
+				up = true;
+				break;
+			
+			case KeyEvent.VK_DOWN:
+				down = true;
 				break;
 			
 			case 32:
@@ -86,6 +89,14 @@ public class Controller implements KeyListener
 			
 			case 39:
 				right = false;
+				break;
+			
+			case KeyEvent.VK_UP:
+				up = false;
+				break;
+		
+			case KeyEvent.VK_DOWN:
+				down = false;
 				break;
 			
 			case 32:

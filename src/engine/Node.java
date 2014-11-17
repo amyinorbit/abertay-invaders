@@ -10,7 +10,7 @@ import java.awt.geom.Point2D;
 *
 * Created on 2014-10-27 by Cesar Parent <http://cesarparent.com>
 */
-public abstract class Node
+public abstract class Node implements java.io.Serializable
 {
 	protected Scene parent;
 	public boolean visible;
@@ -30,9 +30,17 @@ public abstract class Node
 	{
 		frame = new Rectangle(0,0,0,0);
 		position = new Point(0,0);
-		anchorPoint = new Point2D.Double(0,0);
+		anchorPoint = new Point2D.Double(0.5,0.5);
 		parent = null;
 		visible = true;
+	}
+	
+	/*
+	* Node update code. Called by its parent scene every frame
+	*/
+	public void update()
+	{
+		
 	}
 	
 	/*
@@ -51,6 +59,30 @@ public abstract class Node
 	public boolean shouldCollideWithNode(Node node)
 	{
 		return frame.intersects(node.getFrame());
+	}
+	
+	/*
+	* registers the node's parent. If the node already has a parent, and this
+	* parent is not the object being registered, a RuntimeException will be
+	* raised.
+	*/
+	public void setParent(Scene scene)
+	{
+		parent = scene;
+	}
+	
+	public Scene getParent()
+	{
+		return parent;
+	}
+	
+	public void removeFromParent()
+	{
+		if(parent != null)
+		{
+			parent.removeChild(this);
+			this.parent = null;
+		}
 	}
 	
 	/*
@@ -80,11 +112,13 @@ public abstract class Node
 	public void setWidth(int w)
 	{
 		frame.width = w;
+		frame.x = position.x - (int)(anchorPoint.x*frame.width);
 	}
 	
 	public void setHeight(int h)
 	{
 		frame.height = h;
+		frame.y = position.y - (int)(anchorPoint.y*frame.height);
 	}
 	
 	public void setAnchorPoint(double x, double y)
@@ -105,18 +139,9 @@ public abstract class Node
 		return anchorPoint;
 	}
 	
-	/*
-	* registers the node's parent. If the node already has a parent, and this
-	* parent is not the object being registered, a RuntimeException will be
-	* raised.
-	*/
-	public void setParent(Scene scene)
+	public void removeParent()
 	{
-		if(parent != null && !parent.equals(scene))
-		{
-			throw new RuntimeException(this+" already has a parent.");
-		}
-		parent = scene;
+		parent = null;
 	}
 		
 	public Rectangle getFrame()

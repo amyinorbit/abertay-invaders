@@ -2,3 +2,8 @@
 build/*
 *.class
 *.jar
+.Ulysses-Group.plist
+
+*.pdf
+
+*.mov

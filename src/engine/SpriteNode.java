@@ -3,7 +3,6 @@ package GameKit;
 import java.awt.image.*;
 import java.io.*;
 import javax.imageio.*;
-import java.awt.Toolkit;
 import java.net.URL;
 import java.awt.Rectangle;
 import java.awt.Graphics;
@@ -13,10 +12,10 @@ import java.awt.Graphics;
 *
 * Created on 2014-10-28 by Cesar Parent <http://cesarparent.com>
 */
-public class SpriteNode extends Node
+public class SpriteNode extends Node implements java.io.Serializable
 {
 
-	protected BufferedImage image;
+	transient protected BufferedImage image;
 	
 	/*
 	* Creates a SpriteNode. The image must be in the Jar file
@@ -27,7 +26,7 @@ public class SpriteNode extends Node
 		super();
 		try
 		{
-			URL url = getClass().getResource("/"+imageNamed);
+			URL url = getClass().getResource(File.separator+imageNamed);
 			image = ImageIO.read(url);
 		}
 		catch(IOException e)
@@ -49,5 +48,15 @@ public class SpriteNode extends Node
 				frame.y,
 				null);
 		}
+	}
+	
+	private void writeObject(ObjectOutputStream out) throws IOException {
+		out.defaultWriteObject();
+		ImageIO.write(image, "png", out);
+	}
+	
+	private void readObject(ObjectInputStream in) throws IOException, ClassNotFoundException {
+		in.defaultReadObject();
+		image = ImageIO.read(in);
 	}
 }

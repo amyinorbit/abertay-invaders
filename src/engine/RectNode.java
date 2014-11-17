@@ -9,7 +9,7 @@ import java.awt.Rectangle;
 *
 * Created on 2014-10-28 by Cesar Parent <http://cesarparent.com>
 */
-public class RectNode extends Node
+public class RectNode extends Node implements java.io.Serializable
 {
 	protected Color color;
 	
