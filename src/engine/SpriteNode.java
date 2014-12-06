@@ -6,6 +6,7 @@ import javax.imageio.*;
 import java.net.URL;
 import java.awt.Rectangle;
 import java.awt.Graphics;
+import javax.swing.JOptionPane;
 
 /*
 * GameKit.SpriteNode - Special Node holding a sprite loaded from an image
@@ -24,15 +25,7 @@ public class SpriteNode extends Node implements java.io.Serializable
 	public SpriteNode(String imageNamed)
 	{
 		super();
-		try
-		{
-			URL url = getClass().getResource(File.separator+imageNamed);
-			image = ImageIO.read(url);
-		}
-		catch(IOException e)
-		{
-			throw new RuntimeException(e.getMessage());
-		}
+		image = Media.instance().imageNamed(imageNamed);
 		setWidth(image.getWidth());
 		setHeight(image.getHeight());
 	}
@@ -40,14 +33,14 @@ public class SpriteNode extends Node implements java.io.Serializable
 	@Override
 	public void draw(Graphics graphics)
 	{
-		if(visible)
-		{
-			Rectangle frame = getFrame();
-			graphics.drawImage(this.image,
-				frame.x,
-				frame.y,
-				null);
-		}
+		if(!visible) return;
+		Rectangle frame = getFrame();
+		graphics.drawImage(this.image,
+			frame.x,
+			frame.y,
+			frame.width,
+			frame.height,
+			null);
 	}
 	
 	private void writeObject(ObjectOutputStream out) throws IOException {

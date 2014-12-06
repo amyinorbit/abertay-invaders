@@ -71,18 +71,23 @@ public abstract class Node implements java.io.Serializable
 		parent = scene;
 	}
 	
+	/*
+	* Return the node's parent. If no parent has been set, return null
+	*
+	*/
 	public Scene getParent()
 	{
 		return parent;
 	}
 	
+	/*
+	* Remove the node from its parent scene. Set parent to null
+	*/
 	public void removeFromParent()
 	{
-		if(parent != null)
-		{
-			parent.removeChild(this);
-			this.parent = null;
-		}
+		if(parent == null) return;
+		parent.removeChild(this);
+		this.parent = null;
 	}
 	
 	/*

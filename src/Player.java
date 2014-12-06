@@ -10,6 +10,9 @@ public class Player extends SpriteNode implements Collidable, java.io.Serializab
 	private int fireCountDown;
 	private int speed;
 	
+	/*
+	* Creates a player instance.
+	*/
 	public Player(Controller controls)
 	{
 		super("player.png");
@@ -19,6 +22,14 @@ public class Player extends SpriteNode implements Collidable, java.io.Serializab
 		speed = Settings.instance().playerSpeed;
 	}
 	
+	/*
+	* Called every frame before the drawing.
+	* Update the position of the player based on the controls.
+	* if the player's life count reaches 0, the player is killed.
+	* If the firing countdown has reached 0 and the spaceabr is pressed,
+	* trigger fire.
+	*/
+	@Override
 	public void update()
 	{
 		if(parent == null) return;
@@ -54,12 +65,20 @@ public class Player extends SpriteNode implements Collidable, java.io.Serializab
 		}
 	}
 	
+	/*
+	* Adds a new player bullet at the player's position and reset the fire countdown
+	*/
 	public void fire()
 	{
 		parent.addChild(new PlayerBullet(getPosition().x,getPosition().y-40));
 		fireCountDown = Settings.instance().shootDelay;
 	}
 	
+	/*
+	* If the player collides with anything but one of its bullets, remove a life.
+	* If the player collides with a mothership, die instantly.
+	*/
+	@Override
 	public void didCollideWithNode(Node node)
 	{
 		if(node instanceof PlayerBullet) return;
@@ -70,20 +89,32 @@ public class Player extends SpriteNode implements Collidable, java.io.Serializab
 		--lives;
 	}
 	
+	/*
+	* Returns the life count of the player.
+	*/
 	public int getLives()
 	{
 		return lives;
 	}
 	
+	/*
+	* remove a life from the player's count
+	*/
 	public void removeLife()
 	{
 		--lives;
 	}
 	
+	/*
+	* Triggers the player's death. An explosion is added to the scene, and a
+	* message sent to trigger the game over menu.
+	*/
 	public void die()
 	{
 		if(parent == null) return;
-		parent.addChild(new Explosion(getPosition().x, getPosition().y));
+		lives = 0;
+		Media.instance().playAudioFile("gameover.wav");
+		Exploder.explodePlayer(parent, getPosition().x, getPosition().y);
 		((GameScene)parent).gameOver();
 		removeFromParent();
 	}

@@ -12,7 +12,7 @@ public class GameScene extends Scene implements java.io.Serializable
 	
 	private TextNode scoreNode; // label used to display the score
 	private TextNode livesNode; // label used to display lives
-	private TextNode frameRateNode; // when DEBUG set to true, outputs data on the scene
+	private TextNode levelNode; // label used to display the current level
 	
 	public SpaceInvaders cont; // the main game JFrame, used to exit the game scene
 	public Controller controls; // the controller object, traps keystrokes
@@ -52,27 +52,26 @@ public class GameScene extends Scene implements java.io.Serializable
 		// Children nodes setup
 		// Score, lives and debug
 		scoreNode = new TextNode("Score: 0",
-			"KenPixel-mini",
+			"kenpixel_mini",
 			30,
 			Color.white);
 		scoreNode.setPosition(10, 0);
 		scoreNode.setAnchorPoint(0,0);
 		livesNode = new TextNode("3 <3",
-			"KenPixel-mini",
+			"kenpixel_mini",
 			32,
 			Color.white);
 		livesNode.setPosition(sizeX-10, 0);
 		livesNode.setAnchorPoint(1,0);
-		addChild(scoreNode);
-		addChild(livesNode);
-		
-		frameRateNode = new TextNode("0",
-			"Courrier",
+		levelNode = new TextNode("Level 1",
+			"kenpixel_mini",
 			32,
 			Color.white);
-		frameRateNode.setAnchorPoint(0,1);
-		frameRateNode.setPosition(0, sizeY);
-		addChild(frameRateNode);
+		levelNode.setAnchorPoint(.5,0);
+		levelNode.setPosition(sizeX/2, 0);
+		addChild(scoreNode);
+		addChild(livesNode);
+		addChild(levelNode);
 		
 		// player
 		player = new Player(controls);
@@ -108,8 +107,11 @@ public class GameScene extends Scene implements java.io.Serializable
 			{
 				cont.returnToMenu();
 			}
+			for(Node child : children)
+			{
+				if(child instanceof Particle) child.update();
+			}
 		}
-		frameRateNode.setText(framerate+" fps");
 	}
 	
 	/*
@@ -121,7 +123,7 @@ public class GameScene extends Scene implements java.io.Serializable
 		// update the first and last position occupied in the swarm
 		firstPosition = firstPositionInSwarm();
 		lastPosition = lastPositionInSwarm();
-		livesNode.setText(player.getLives()+" <3"); // update the lives indicator
+		livesNode.setText("lives: "+player.getLives()); // update the lives indicator
 		if(!reachedBoss) // if the boss is not reached, randomly add destroyers and asteroids
 		{
 			handleDestroyers();
@@ -199,7 +201,7 @@ public class GameScene extends Scene implements java.io.Serializable
 	*/
 	public void initInvaders()
 	{
-		for(int i = 0; i < 4; ++i)
+		for(int i = 0; i < 3; ++i)
 		{
 			for(int j = 0; j < 6; ++j)
 			{
@@ -283,9 +285,13 @@ public class GameScene extends Scene implements java.io.Serializable
 	*/
 	public void nextLevel()
 	{
+		if(player.getLives() <= 0) return;
+		Media.instance().playAudioFile("holymothership.wav");
 		opponents.clear();
 		Settings.instance().invaderSpeed = ++level;
 		Settings.instance().shootDelay -=(int).05*60;
+		levelNode.setText("Level "+level);
+		addChild(new TimedLabel(getWidth()/2, getHeight()/2, "LEVEL UP", 50));
 		initInvaders();
 		reachedBoss = false;
 	}
@@ -302,7 +308,7 @@ public class GameScene extends Scene implements java.io.Serializable
 		}
 		
 		TextNode outcome = new TextNode("you died",
-				"KenPixel-mini",
+				"kenpixel_mini",
 				64,
 				Color.white);
 		outcome.setPosition(getWidth()/2, 80);
@@ -310,21 +316,21 @@ public class GameScene extends Scene implements java.io.Serializable
 
 		String scoreStr = "Final Score: "+score;
 		TextNode scoreText = new TextNode(scoreStr,
-			"KenPixel-mini",
+			"kenpixel_mini",
 			32,
 			Color.white);
 		scoreText.setPosition(getWidth()/2, getHeight()/2+60);
 		addChild(scoreText);
 		
 		TextNode highScore = new TextNode("High Score: "+Settings.instance().highScore,
-			"KenPixel-mini",
+			"kenpixel_mini",
 			32,
 			Color.white);
 		highScore.setPosition(getWidth()/2, getHeight()/2+120);
 		addChild(highScore);
 		
 		TextNode pressSpace = new TextNode("press <esc> to continue",
-			"KenPixel-mini",
+			"kenpixel_mini",
 			24,
 			Color.white);
 		pressSpace.setPosition(getWidth()/2, getHeight()-40);
@@ -345,6 +351,10 @@ public class GameScene extends Scene implements java.io.Serializable
 		opponents.remove(child);
 	}
 	
+	/*
+	* Overloaded unpacking method. Called when the object is restored from
+	* a serialised file, resets the invader's speed to the right level
+	*/
 	private void readObject(ObjectInputStream in) throws IOException, ClassNotFoundException {
 		in.defaultReadObject();
 		Settings.instance().invaderSpeed = level;

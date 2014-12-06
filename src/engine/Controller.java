@@ -42,6 +42,9 @@ public class Controller implements KeyListener, java.io.Serializable
 		
 	}
 	
+	/*
+	* Sets the appropriate instance variable to true when a key is pressed
+	*/
 	public void keyPressed(KeyEvent e)
 	{
 		switch(e.getKeyCode())
@@ -79,6 +82,9 @@ public class Controller implements KeyListener, java.io.Serializable
 		}
 	}
 	
+	/*
+	* Sets the appropriate instance variable to false when a key is released
+	*/
 	public void keyReleased(KeyEvent e)
 	{
 		switch(e.getKeyCode())

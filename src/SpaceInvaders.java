@@ -7,6 +7,11 @@ import java.awt.Container;
 import javax.swing.JOptionPane;
 import java.io.*;
 
+/*
+* SpaceInvaders is the programme's entry point.
+* It acts as a game director, and is responsible for loading and
+* presenting game and menu scenes to the player
+*/
 class SpaceInvaders extends JFrame
 {
 	Scene currentScene;
@@ -15,17 +20,8 @@ class SpaceInvaders extends JFrame
 	int sizeY;
 	
 	public static void main(String[] args) {
-		try{
-			
-			SpaceInvaders game = new SpaceInvaders();
-			game.init();
-		}
-		catch(Exception e)
-		{
-			String message = "Runtime error:\n\n"+e.getMessage();
-			JOptionPane.showMessageDialog(null,message);
-			System.exit(1);
-		}
+		SpaceInvaders game = new SpaceInvaders();
+		game.init();
 	}
 	
 	/*
@@ -48,14 +44,35 @@ class SpaceInvaders extends JFrame
 		setVisible(true);
 		currentScene.beginRendering();
 		
+		// preload images and audio
+		String images[] = new String[] {
+			"background.png",
+			"destroyer.png",
+			"martian.png",
+			"mercurian.png",
+			"mothership.png",
+			"venusian.png"
+		};
+		String audio[] = new String[] {
+			"explosion.wav",
+			"gameover.wav",
+			"holymothership.wav",
+			"mothership.wav",
+			"shoot.wav"
+		};
+		Media.instance().preloadImages(images);
+		Media.instance().preloadAudio(audio);
+		
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); 
 	}
 	
 	/*
-	* Create a new GameScene from level 1 and presents it instead of the menu
+	* Stop displaying the main menu scene, and load a new GameScene
+	* at level 1 before presenting it to the player
 	*/
 	public void startNewGame()
 	{
+		Settings.instance().invaderSpeed = 1;
 		currentScene.stopRendering();
 		Container pane = getContentPane();
 		pane.removeAll();
@@ -69,7 +86,8 @@ class SpaceInvaders extends JFrame
 	}
 	
 	/*
-	* Stops the current GameScene, destroy it and present the main menu
+	* Stop presenting the GameScene object and replace it with a newly loaded
+	* Main menu scene.
 	*/
 	public void returnToMenu()
 	{
@@ -111,6 +129,7 @@ class SpaceInvaders extends JFrame
 		{
 			String message = "Error loading savegame:\n\n"+cnf.getMessage();
 			JOptionPane.showMessageDialog(null,message);
+			ctrl.returnKey = false;
 			return;
 		}
 		

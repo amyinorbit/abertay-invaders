@@ -6,12 +6,23 @@ import java.awt.Rectangle;
 
 public class Mothership extends Boss implements java.io.Serializable
 {
+	/*
+	* Create a new Mothership at x,y.
+	*/
 	public Mothership(int x, int y)
 	{
 		super("mothership.png", x, y, 3, 200);
+		Media.instance().playAudioFile("mothership.wav");
 		speed = Settings.instance().invaderSpeed + 3;
 	}
 	
+	/*
+	* Moves the Mothership sideways.
+	* When the mothership reaches the edge of the field, it changes its targetY
+	* and increments its speed by one.
+	* If targetY is further down that the mothership's current y position, it
+	* stops going sideways and goes downwards.
+	*/
 	@Override
 	protected void move()
 	{
@@ -49,25 +60,15 @@ public class Mothership extends Boss implements java.io.Serializable
 		}
 	}
 	
-	@Override
-	public void didCollideWithNode(Node node)
-	{
-		if(parent == null) return;
-		else if(node instanceof PlayerBullet)
-		{
-			parent.addChild(new Explosion(getPosition().x, getPosition().y));
-			if(--lives <= 0)
-			{
-				die();
-			}
-		}
-	}
-	
+	/*
+	* Removes the mothership from its parent scene, add the points to
+	* the player's score, and triggers the level change.
+	*/
 	@Override
 	public void die()
 	{
 		if(parent == null) return;
-		parent.addChild(new Explosion(getPosition().x, getPosition().y));
+		Exploder.explodeBoss(parent, getPosition().x, getPosition().y);
 		((GameScene)parent).nextLevel();
 		removeFromParent();
 	}

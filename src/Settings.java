@@ -2,6 +2,7 @@ package CesarParent;
 
 import java.io.*;
 import java.util.Arrays;
+import javax.swing.JOptionPane;
 
 /*
 * Settings provides a way to read the settings written in a game.cfg file
@@ -22,6 +23,8 @@ public class Settings
 	
 	/*
 	* Loads the game.cfg file from the jar package, and parses it line by line.
+	* If no file's been found in the user's home directory, or if that file is unreadable,
+	* the game loads its default file.
 	*/
 	protected Settings()
 	{
@@ -44,6 +47,7 @@ public class Settings
 	
 	/*
 	* Return the singleton instance of Settings. Settings should always be accessed using instance()
+	* Using a singleton ensures that only one Setting object tries to access the file.
 	*/
 	public static Settings instance()
 	{
@@ -55,7 +59,7 @@ public class Settings
 	}
 	
 	/*
-	* Parses the content of the default config file bundled in the har
+	* Parses the content of the default config file bundled in the jar
 	*/
 	protected void readDefaultFile()
 	{
@@ -68,14 +72,17 @@ public class Settings
 				parseLineFromCFG(line);
 			}
 			reader.close();
+			writeSettingFile();
 		}
 		catch(IOException e)
 		{
-			throw new RuntimeException("Error reading default config file:\n\n"+e.getMessage()+"");
+			JOptionPane.showMessageDialog(null,
+				"Error reading default config file:\n\n"+e.getMessage());
 		}
 		catch(Exception e)
 		{
-			throw new RuntimeException("Error reading default config file.");
+			JOptionPane.showMessageDialog(null,
+				"Error reading default config file");
 		}
 	}
 	
@@ -115,6 +122,10 @@ public class Settings
 		}
 	}
 	
+	/*
+	* Dump the content of the settings objects in a .cfg file located in the
+	* user's home directory.
+	*/
 	public void writeSettingFile()
 	{
 		String path = System.getProperty("user.home") + File.separator + "invaders.cfg";
@@ -131,7 +142,8 @@ public class Settings
 		}
 		catch(IOException e)
 		{
-			throw new RuntimeException("Unable to write configuration file");
+			JOptionPane.showMessageDialog(null,
+				"Unable to write configuration file");
 		}
 	}
 }

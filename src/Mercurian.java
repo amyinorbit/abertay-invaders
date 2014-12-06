@@ -8,6 +8,9 @@ public class Mercurian extends Invader implements CanCloak, java.io.Serializable
 	private int cloakCountDown;
 	private Random rnd;
 	
+	/*
+	* Create a new Mercurian at x,y, and a given position in the swarm.
+	*/
 	public Mercurian(int x, int y, int position)
 	{
 		super("mercurian.png", x, y);
@@ -18,6 +21,10 @@ public class Mercurian extends Invader implements CanCloak, java.io.Serializable
 		cloakCountDown = rnd.nextInt(200);
 	}
 	
+	/*
+	* Changes the cloaking state of the Mercurian when the countdown reaches 0,
+	* and resets the countdown to a random number.
+	*/
 	public void triggerCloak()
 	{
 		if(cloakCountDown > 0)

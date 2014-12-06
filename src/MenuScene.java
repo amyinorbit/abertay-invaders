@@ -10,38 +10,40 @@ public class MenuScene extends Scene
 	private Controller controls;
 	private int currentChoice;
 	private boolean keyUnPressed;
+	private boolean returnUnpressed;
 	SpaceInvaders cont;
 	
 	private static final int NEW_GAME = 0;
 	private static final int LOAD_GAME = 1;
 	
+	/*
+	* Setup a main menu with a title text node, and three menu items text
+	* nodes
+	*/
 	public MenuScene(int sizeX, int sizeY, SpaceInvaders controller)
 	{
 		super(sizeX, sizeY, "background.png");
 		cont = controller;
 		TextNode title = new TextNode("SPACE INVADERS",
-			"KenPixel-mini",
+			"kenpixel_mini",
 			72,
 			Color.white);
 		title.setPosition(sizeX/2, 100);
 		addChild(title);
 		TextNode newGame = new TextNode("new game",
-			"KenPixel-mini",
+			"kenpixel_mini",
 			40,
-			Color.white,
-			new Color(0x54, 0x43, 0x4b));
+			Color.white);
 		newGame.setPosition(sizeX/2, sizeY/2);
 		TextNode resumeGame = new TextNode("resume game",
-			"KenPixel-mini",
+			"kenpixel_mini",
 			40,
-			Color.white,
-			new Color(0x54, 0x43, 0x4b));
+			Color.white);
 		resumeGame.setPosition(sizeX/2, sizeY/2+64);
 		TextNode quitGame = new TextNode("quit",
-			"KenPixel-mini",
+			"kenpixel_mini",
 			40,
-			Color.white,
-			new Color(0x54, 0x43, 0x4b));
+			Color.white);
 		quitGame.setPosition(sizeX/2, sizeY/2+128);
 		
 		addChild(newGame);
@@ -52,8 +54,13 @@ public class MenuScene extends Scene
 		controls = cont.ctrl;
 		currentChoice = NEW_GAME;
 		keyUnPressed = true;
+		returnUnpressed = true;
 	}
 	
+	/*
+	* Called every frame. Updates the highlighted item depending on user
+	* input
+	*/
 	@Override
 	public void update()
 	{
@@ -78,27 +85,33 @@ public class MenuScene extends Scene
 			keyUnPressed = true;
 		}
 		
-		if(controls.returnKey)
+		if(controls.returnKey && returnUnpressed)
 		{
 			dispatchAction();
+			returnUnpressed = false;
+		}
+		else
+		{
+			returnUnpressed = true;
 		}
 		
 		for(int i = 0; i < items.length; ++i)
 		{
 			if(i == currentChoice)
 			{
-				items[i].color = Color.black;
-				items[i].background = Color.white;
+				items[i].color = new Color(0xcc, 0x44, 0x44);
 			}
 			else
 			{
 				items[i].color = Color.white;
-				// 987a88 #54434b
-				items[i].background = new Color(0x54, 0x43, 0x4b);
 			}
 		}
 	}
 	
+	/*
+	* Call the right action on the main game controller depending on the
+	* currently highlighted item in the menu
+	*/
 	private void dispatchAction()
 	{
 		if(currentChoice == 0)
@@ -115,6 +128,9 @@ public class MenuScene extends Scene
 		}
 	}
 	
+	/*
+	* Proper modulo (as opposed to %, remainder) maths operation.
+	*/
 	private int modulo(int x, int y)
 	{
 		int r = x % y;

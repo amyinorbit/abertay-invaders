@@ -6,6 +6,7 @@ import java.awt.Rectangle;
 import java.awt.geom.Rectangle2D;
 import java.awt.Font;
 import java.awt.font.*;
+import java.io.*;
 import java.awt.Color;
 import java.awt.RenderingHints;
 
@@ -21,11 +22,17 @@ public class TextNode extends Node implements java.io.Serializable
 	public Color color;
 	public Color background;
 	
+	private String fontname;
+	private int size;
+	
 	public TextNode(String string, String fontname, int size, Color fg)
 	{
 		super();
 		text = string;
-		font = new Font(fontname, Font.PLAIN, size);
+		font = Media.instance().fontNamed(fontname, size);
+		//font = new Font(fontname, Font.PLAIN, size);
+		this.fontname = fontname;
+		this.size = size;
 		color = fg;
 		background = null;
 		processText();
@@ -61,23 +68,26 @@ public class TextNode extends Node implements java.io.Serializable
 	@Override
 	public void draw(Graphics graphics)
 	{
-		if(visible)
+		if(!visible) return;
+		if(graphics instanceof Graphics2D)
 		{
-			if(graphics instanceof Graphics2D)
-			{
-				((Graphics2D)graphics).setRenderingHint(
-					RenderingHints.KEY_TEXT_ANTIALIASING,
-					RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
-			}
-			graphics.setFont(font);
-			Rectangle frame = getFrame();
-			if(background != null)
-			{
-				graphics.setColor(background);
-				graphics.fillRect(frame.x-10, frame.y+10, frame.width+15, frame.height);
-			}
-			graphics.setColor(color);
-			graphics.drawString(text, frame.x, frame.y+frame.height);
+			((Graphics2D)graphics).setRenderingHint(
+				RenderingHints.KEY_TEXT_ANTIALIASING,
+				RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
 		}
+		graphics.setFont(font);
+		Rectangle frame = getFrame();
+		if(background != null)
+		{
+			graphics.setColor(background);
+			graphics.fillRect(frame.x-10, frame.y+10, frame.width+15, frame.height);
+		}
+		graphics.setColor(color);
+		graphics.drawString(text, frame.x, frame.y+frame.height);
+	}
+	
+	private void readObject(ObjectInputStream in) throws IOException, ClassNotFoundException {
+		in.defaultReadObject();
+		font = Media.instance().fontNamed(this.fontname, this.size);
 	}
 }

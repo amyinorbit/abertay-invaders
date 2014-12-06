@@ -4,11 +4,11 @@ import java.util.ArrayList;
 
 import java.awt.Graphics;
 import java.awt.Color;
-import java.awt.Graphics;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.AlphaComposite;
+import java.awt.Graphics2D;
 
 import javax.swing.JPanel;
 import javax.swing.Timer;
@@ -41,7 +41,7 @@ public class Scene extends JPanel implements ActionListener, java.io.Serializabl
 		deletionBuffer = new ArrayList<Node>();
 		additionBuffer = new ArrayList<Node>();
 		// set a 16ms (~1/60th of a second timer)
-		frameTimer = new Timer(15, this);
+		frameTimer = new Timer(16, this);
 		setFocusable(true);
 		interval = 0;
 		fpsCount = 15;
@@ -108,7 +108,7 @@ public class Scene extends JPanel implements ActionListener, java.io.Serializabl
 	*/
 	protected void paintComponent(Graphics graphics)
 	{
-		//graphics.clearRect(0, 0, getWidth(), getHeight());
+		graphics.clearRect(0, 0, getWidth(), getHeight());
 		for(Node child : children)
 		{
 			child.draw(graphics);
@@ -170,18 +170,19 @@ public class Scene extends JPanel implements ActionListener, java.io.Serializabl
 	* 	- the custom update code is executed
 	* 	- Collidable are then checked for collisions
 	* 	- The Scene is drawn to the screen
+		- newly added children are added to the children arraylist
 	*	- children flagged for removal during the frame are removed
 	*/
 	public void actionPerformed(ActionEvent event)
 	{
 		if(event.getSource() == frameTimer)
 		{
-			if(fpsCount++ >= 15)
+			if(++fpsCount >= 15)
 			{
 				long time = new Date().getTime();
 				interval = (int)(time -lastFrame);
 				lastFrame = time;
-				framerate = (double)(15000/interval);
+				framerate = (double)(15000.0/(double)interval);
 				fpsCount = 0;
 			}
 			

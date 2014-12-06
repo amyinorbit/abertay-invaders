@@ -6,6 +6,9 @@ public abstract class Boss extends Invader implements CanShoot, java.io.Serializ
 {
 	private int shootCountDown;
 	
+	/*
+	* Creates a boss object, setting the lives and points rewarded for killing
+	*/
 	public Boss(String image, int x, int y, int lives, int points)
 	{
 		super(image, x, y);
@@ -14,6 +17,9 @@ public abstract class Boss extends Invader implements CanShoot, java.io.Serializ
 		shootCountDown = 120;
 	}
 	
+	/*
+	* Decides wether the boss should shoot or not, based on a countdown.
+	*/
 	public void triggerShoot()
 	{
 		if(parent == null) return;

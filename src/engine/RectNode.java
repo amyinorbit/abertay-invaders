@@ -24,12 +24,10 @@ public class RectNode extends Node implements java.io.Serializable
 	@Override
 	public void draw(Graphics graphics)
 	{
-		if(visible)
-		{
-			Rectangle frame = getFrame();
-			graphics.setColor(color);
-			graphics.fillRect(frame.x, frame.y, frame.width, frame.height);
-		}
+		if(!visible) return;
+		Rectangle frame = getFrame();
+		graphics.setColor(color);
+		graphics.fillRect(frame.x, frame.y, frame.width, frame.height);
 	}
 	
 }
