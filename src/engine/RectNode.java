@@ -7,7 +7,7 @@ import java.awt.Rectangle;
 /*
 * GameKit.RectNode - Node represented by a rectangle;
 *
-* Created on 2014-10-28 by Cesar Parent <http://cesarparent.com>
+* Created on 2014-10-28 by Amy Parent <http://amyparent.com>
 */
 public class RectNode extends Node implements java.io.Serializable
 {

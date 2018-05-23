@@ -8,7 +8,7 @@ import java.awt.event.KeyListener;
 * Polls keyboard and, hopefully, controllers, and stores basic key presses
 * as properties
 *
-* Created on 2014-10-28 by Cesar Parent <http://cesarparent.com>
+* Created on 2014-10-28 by Amy Parent <http://amyparent.com>
 */
 public class Controller implements KeyListener, java.io.Serializable
 {

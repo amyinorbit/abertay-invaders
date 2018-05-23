@@ -13,7 +13,7 @@ import java.awt.RenderingHints;
 /*
 * GameKit.Node - Text based node.
 *
-* Created on 2014-10-28 by Cesar Parent <http://cesarparent.com>
+* Created on 2014-10-28 by Amy Parent <http://amyparent.com>
 */
 public class TextNode extends Node implements java.io.Serializable
 {

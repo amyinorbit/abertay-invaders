@@ -11,7 +11,7 @@ import javax.swing.JOptionPane;
 /*
 * GameKit.SpriteNode - Special Node holding a sprite loaded from an image
 *
-* Created on 2014-10-28 by Cesar Parent <http://cesarparent.com>
+* Created on 2014-10-28 by Amy Parent <http://amyparent.com>
 */
 public class SpriteNode extends Node implements java.io.Serializable
 {

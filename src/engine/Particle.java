@@ -13,7 +13,7 @@ import java.awt.geom.AffineTransform;
 /*
 * GameKit.Particle - Simple rectangle particle implementation
 *
-* Created on 2014-11-25 by Cesar Parent <http://cesarparent.com>
+* Created on 2014-11-25 by Amy Parent <http://amyparent.com>
 */
 public class Particle extends RectNode implements java.io.Serializable
 {

@@ -19,7 +19,7 @@ import java.util.Date;
 * GameKit.Scene - Simple scene extending JFrame
 * Calls the updateWithTimeInterval(interval) every tick
 *
-* Created on 2014-10-27 by Cesar Parent <http://cesarparent.com>
+* Created on 2014-10-27 by Amy Parent <http://amyparent.com>
 */
 public class Scene extends JPanel implements ActionListener, java.io.Serializable
 {
